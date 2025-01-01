@@ -4,10 +4,10 @@ function authenticateToken(req,res,next){
     const authheader = req.headers.authentication;
     const [type, token] = authheader.split(" ");
 
-    if (type !== "bearer") return res.status(401);
+    if (type !== "Bearer") return res.status(401);
     if (!token) return res.status(401);
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err,user)=>{
+    jwt.verify(token, process.env.ACCESS_KEY_SECRET, (err,user)=>{
         if (err) return res.status(401);
         req.user = user;
         next();
