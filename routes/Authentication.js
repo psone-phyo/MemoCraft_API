@@ -48,23 +48,24 @@ router.post('/login',
         })
 
         if (requiredEmail.length > 0){
-            return res.status(400).json({errors: "Email is required"});
+            return res.status(400).json({errors: {email: "Email is required"}});
         }
         
         const checkEmail = await User.findOne({email: req.body.email});
         if (!checkEmail){
-            return res.status(400).json({errors: "Email does not Exist"})
+            return res.status(400).json({errors: {email: "Email does not Exist"}})
         }
 
         if (!errors.isEmpty()){
-            return res.status(400).json({ errors: errors.array().map((e)=>e.msg) });
+            return res.status(400).json({ errors: {password: "Incorrect Password"} });
         }
 
         const user = await User.findOne({email: req.body.email});
         const Token = jwt.sign({user}, process.env.ACCESS_KEY_SECRET, {expiresIn: '1h'});
         return res.status(200).json({
-            data: user,
-            Token: Token
+            Token: Token,
+            message: "Login Successful"
+
         })
 })
 
