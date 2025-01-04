@@ -35,7 +35,7 @@ router.get('/user/info', async (req, res)=>{
 router.get("/", async (req, res) => {
   try {
     const { user } = req.user;
-    const notes = await Note.find({ userId: user._id });
+    const notes = await Note.find({ userId: user._id }).sort({isPinned: -1,created_at: -1});
     res.status(200).json({
       meta: {
         count: notes.length,
@@ -66,7 +66,8 @@ router.post(
       const note = new Note({
         title: req.body.title,
         content: req.body.content,
-        tags: req.body.tags,
+        tags: req.body.tags || [],
+        isPinned: req.body.isPinned || false,
         userId: user._id,
       });
 
@@ -142,6 +143,7 @@ router.put(
       if (title) note.title = title;
       if (content) note.content = content;
       if (tags) note.tags = tags;
+      note.created_at = new Date().getTime();
 
       await note.save();
 
@@ -161,7 +163,7 @@ router.put(
   }
 );
 
-router.put(
+router.patch(
   "/ispinned/:id",
   param("id")
     .notEmpty()
