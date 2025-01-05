@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Note = require("../models/Note.model");
 const User = require("../models/User.model");
 const {
+  query,
   body,
   param,
   matchedData,
@@ -205,5 +206,39 @@ router.patch(
     }
   }
 );
+
+router.post('/search',
+  query('searchKey').notEmpty().withMessage("Search query is required")
+  ,async (req,res) => {
+    try{
+      const errors = validationResult(req)
+      if (!errors.isEmpty()){
+        return res.status(400).json({errors: errors.array().map((e)=>e.msg)})
+      }
+      const {user} = req.user;
+      const {searchKey} = req.query;
+
+      const matchedNotes = await Note.find({
+        userId: user._id,
+        $or: [
+          { title: {$regex: new RegExp(searchKey, "i")}},
+          { content: {$regex: new RegExp(searchKey, "i")}},
+          { tags: {$regex: new RegExp(searchKey, "i")}},
+        ]
+      })
+
+      res.status(200).json({
+        data: matchedNotes,
+      })
+
+
+    }catch(e){
+      res.status(500).json({
+        errors: e,
+        message: "Internal Server Error"
+      })
+      
+    }
+})
 
 module.exports = router;
