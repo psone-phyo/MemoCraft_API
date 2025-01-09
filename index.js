@@ -19,7 +19,7 @@ app.use(express.json());
 
 app.use(cors({
     origin: "https://memo-craft-ten.vercel.app", // Explicitly allow your frontend origin
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }));
   
