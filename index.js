@@ -17,9 +17,12 @@ const auth = require('./routes/Authentication');
 
 app.use(express.json());
 
-app.use(cors(
-    { origin: "*" }
-));
+app.use(cors({
+    origin: "https://memo-craft-ten.vercel.app", // Explicitly allow your frontend origin
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }));
+  
 app.get('/', (req,res)=>{
     res.send("This is MemoCraft Note app API")
 })
