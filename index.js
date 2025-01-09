@@ -20,14 +20,12 @@ app.use(express.json());
 app.use(cors(
     { origin: "*" }
 ));
+app.get('/', (req,res)=>{
+    res.send("This is MemoCraft Note app API")
+})
 
 app.use('/api/auth', auth);
 app.use('/api/notes/', authenticateToken, require('./routes/Note'));
-
-app.get('/users', async(req, res) => {
-    const users = await User.find();
-    res.json(users);
-})
 
 
 
