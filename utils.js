@@ -6,10 +6,10 @@ function authenticateToken(req,res,next){
         const [type, token] = authheader.split(" ");
 
         if (type !== "Bearer") return res.status(401).json({
-            message: "Unauthorized1"
+            message: "Unauthorized"
         });
         if (!token) return res.status(401).json({
-            message: "Unauthorized2"
+            message: "Unauthorized"
         });
     
         jwt.verify(token, process.env.ACCESS_KEY_SECRET, (err,user)=>{
@@ -19,7 +19,7 @@ function authenticateToken(req,res,next){
         })
     }else{
         res.status(401).json({
-            message: "Unauthorized3"
+            message: "Unauthorized"
         })
     }
     

@@ -90,7 +90,7 @@ router.post(
 
     const user = await User.findOne({ email: req.body.email });
     const Token = jwt.sign({ user }, process.env.ACCESS_KEY_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "5h",
     });
     return res.status(200).json({
       Token: Token,
